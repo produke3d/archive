@@ -1,4 +1,4 @@
-name: Batch File Processing
+name: Batch Process Demos
 
 on:
   workflow_dispatch:
@@ -25,7 +25,7 @@ jobs:
         with:
           repository: produke3d/scripts
           ref: master
-          token: ${{ secrets.SCRIPTS_TOKEN }}
+          token: ${{ secrets.SCRIPTS_REPOSITORY_TOKEN }}
           path: scripts
           persist-credentials: false
 
