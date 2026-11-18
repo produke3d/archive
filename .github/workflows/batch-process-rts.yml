@@ -1,0 +1,43 @@
+name: Batch Process RTS
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "rts/**"
+
+jobs:
+
+  process-rts:
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+    
+      - name: Check out public archive repository
+        uses: actions/checkout@v4
+
+      - name: Check out private scripts repository
+        uses: actions/checkout@v4
+        with:
+          repository: produke3d/scripts
+          ref: master
+          token: ${{ secrets.SCRIPTS_TOKEN }}
+          path: scripts
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Run processing script
+        run: node scripts/batch-process-rts.js
+
+      - name: Upload rts.json.gz
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload archive-database-files rts.json.gz --clobber
