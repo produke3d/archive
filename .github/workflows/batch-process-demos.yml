@@ -37,6 +37,18 @@ jobs:
       - name: Run processing script
         run: node scripts/batch-process-demos.js
 
+      - name: Commit changes
+        run: |
+          git add .
+          if git diff --cached --quiet; then
+            echo "Already up to date."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m ""
+            git push
+          fi
+
       - name: Upload demos.json.gz
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
