@@ -8,7 +8,7 @@ on:
 
 jobs:
 
-  process-rts:
+  batch-process-rts:
 
     runs-on: ubuntu-latest
 
