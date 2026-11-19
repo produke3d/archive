@@ -49,7 +49,23 @@ jobs:
             git push
           fi
 
-      - name: Upload demos.json.gz
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload archive-database-files demos.json.gz --clobber
+      - name: Check out website repository
+        uses: actions/checkout@v4
+        with:
+          repository: produke3d/website
+          token: ${{ secrets.WEBSITE_REPOSITORY_TOKEN }}
+          path: website
+
+      - name: Push demos.json.gz to website
+        run: |
+          cp demos.json.gz website/res/databases/demos.json.gz
+          cd website
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add res/databases/demos.json.gz
+          if git diff --cached --quiet; then
+            echo "demos.json.gz is unchanged; nothing to push."
+            exit 0
+          fi
+          git commit -m "Update demos database"
+          git push

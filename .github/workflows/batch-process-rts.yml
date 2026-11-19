@@ -37,7 +37,16 @@ jobs:
       - name: Run processing script
         run: node scripts/batch-process-rts.js
 
-      - name: Upload rts.json.gz
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload archive-database-files rts.json.gz --clobber
+      - name: Push rts.json.gz to website
+        run: |
+          cp rts.json.gz website/res/databases/rts.json.gz
+          cd website
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add res/databases/rts.json.gz
+          if git diff --cached --quiet; then
+            echo "rts.json.gz is unchanged; nothing to push."
+            exit 0
+          fi
+          git commit -m "Update demos database"
+          git push

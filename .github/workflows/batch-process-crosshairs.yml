@@ -37,7 +37,23 @@ jobs:
       - name: Run processing script
         run: node scripts/batch-process-crosshairs.js
 
-      - name: Upload crosshairs.json.gz
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload archive-database-files crosshairs.json.gz --clobber
+      - name: Check out website repository
+        uses: actions/checkout@v4
+        with:
+          repository: produke3d/website
+          token: ${{ secrets.WEBSITE_REPOSITORY_TOKEN }}
+          path: website
+
+      - name: Push crosshairs.json.gz to website
+        run: |
+          cp crosshairs.json.gz website/res/databases/crosshairs.json.gz
+          cd website
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add res/databases/crosshairs.json.gz
+          if git diff --cached --quiet; then
+            echo "crosshairs.json.gz is unchanged; nothing to push."
+            exit 0
+          fi
+          git commit -m "Update crosshairs database"
+          git push
