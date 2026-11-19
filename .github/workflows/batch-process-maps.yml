@@ -56,5 +56,5 @@ jobs:
             echo "maps.json.gz is unchanged; nothing to push."
             exit 0
           fi
-          git commit -m "Update demos database"
+          git commit -m "Update maps database"
           git push
