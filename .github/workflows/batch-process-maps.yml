@@ -46,6 +46,7 @@ jobs:
 
       - name: Push maps.json.gz to website
         run: |
+          mkdir -p website/res/databases
           cp maps.json.gz website/res/databases/maps.json.gz
           cd website
           git config user.name "github-actions[bot]"

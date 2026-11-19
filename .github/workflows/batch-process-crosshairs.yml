@@ -46,6 +46,7 @@ jobs:
 
       - name: Push crosshairs.json.gz to website
         run: |
+          mkdir -p website/res/databases
           cp crosshairs.json.gz website/res/databases/crosshairs.json.gz
           cd website
           git config user.name "github-actions[bot]"

@@ -58,6 +58,7 @@ jobs:
 
       - name: Push demos.json.gz to website
         run: |
+          mkdir -p website/res/databases
           cp demos.json.gz website/res/databases/demos.json.gz
           cd website
           git config user.name "github-actions[bot]"
